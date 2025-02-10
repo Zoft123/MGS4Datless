@@ -14,7 +14,8 @@
 
    - Click the **Browse...** button.
    - Select the main Metal Gear Solid 4 (MGS4) game directory.
-      -    ![image](https://github.com/user-attachments/assets/d3a12ebf-1421-4485-9209-9d71bb26d90f)
+      -    ![image](https://github.com/user-attachments/assets/bb449dd8-95b2-4c46-acce-f990f14e05f2)
+
 
 
 2. **Initiate the Undat Process**
