@@ -23,75 +23,75 @@ namespace MGSDatless
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MGS4DatlessForm));
-            txtMGSPath = new TextBox();
-            btnBrowse = new Button();
-            btnUndat = new Button();
-            progressBar = new ProgressBar();
-            txtLog = new RichTextBox();
-            SuspendLayout();
+            this.txtMGSPath = new System.Windows.Forms.TextBox();
+            this.btnBrowse = new System.Windows.Forms.Button();
+            this.btnUndat = new System.Windows.Forms.Button();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.txtLog = new System.Windows.Forms.RichTextBox();
+            this.SuspendLayout();
             // 
             // txtMGSPath
             // 
-            txtMGSPath.Location = new Point(12, 12);
-            txtMGSPath.Name = "txtMGSPath";
-            txtMGSPath.ReadOnly = true;
-            txtMGSPath.Size = new Size(500, 23);
-            txtMGSPath.TabIndex = 0;
+            this.txtMGSPath.Location = new System.Drawing.Point(10, 10);
+            this.txtMGSPath.Name = "txtMGSPath";
+            this.txtMGSPath.ReadOnly = true;
+            this.txtMGSPath.Size = new System.Drawing.Size(429, 20);
+            this.txtMGSPath.TabIndex = 0;
             // 
             // btnBrowse
             // 
-            btnBrowse.Location = new Point(518, 11);
-            btnBrowse.Name = "btnBrowse";
-            btnBrowse.Size = new Size(75, 25);
-            btnBrowse.TabIndex = 1;
-            btnBrowse.Text = "Browse...";
-            btnBrowse.UseVisualStyleBackColor = true;
-            btnBrowse.Click += btnBrowse_Click;
+            this.btnBrowse.Location = new System.Drawing.Point(444, 10);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(64, 22);
+            this.btnBrowse.TabIndex = 1;
+            this.btnBrowse.Text = "Browse...";
+            this.btnBrowse.UseVisualStyleBackColor = true;
             // 
             // btnUndat
             // 
-            btnUndat.Location = new Point(12, 50);
-            btnUndat.Name = "btnUndat";
-            btnUndat.Size = new Size(75, 30);
-            btnUndat.TabIndex = 2;
-            btnUndat.Text = "Undat";
-            btnUndat.UseVisualStyleBackColor = true;
-            btnUndat.Click += btnUndat_Click;
+            this.btnUndat.Location = new System.Drawing.Point(10, 43);
+            this.btnUndat.Name = "btnUndat";
+            this.btnUndat.Size = new System.Drawing.Size(64, 26);
+            this.btnUndat.TabIndex = 2;
+            this.btnUndat.Text = "Undat";
+            this.btnUndat.UseVisualStyleBackColor = true;
             // 
             // progressBar
             // 
-            progressBar.Location = new Point(12, 400);
-            progressBar.Name = "progressBar";
-            progressBar.Size = new Size(581, 23);
-            progressBar.TabIndex = 3;
+            this.progressBar.Location = new System.Drawing.Point(10, 347);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(498, 20);
+            this.progressBar.TabIndex = 3;
             // 
             // txtLog
             // 
-            txtLog.Location = new Point(12, 100);
-            txtLog.Name = "txtLog";
-            txtLog.ReadOnly = true;
-            txtLog.Size = new Size(581, 290);
-            txtLog.TabIndex = 4;
-            txtLog.Text = "";
+            this.txtLog.Location = new System.Drawing.Point(10, 87);
+            this.txtLog.Name = "txtLog";
+            this.txtLog.ReadOnly = true;
+            this.txtLog.Size = new System.Drawing.Size(499, 252);
+            this.txtLog.TabIndex = 4;
+            this.txtLog.Text = "";
+            this.txtLog.TextChanged += new System.EventHandler(this.txtLog_TextChanged);
             // 
             // MGS4DatlessForm
             // 
-            AcceptButton = btnUndat;
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(605, 435);
-            Controls.Add(txtLog);
-            Controls.Add(progressBar);
-            Controls.Add(btnUndat);
-            Controls.Add(btnBrowse);
-            Controls.Add(txtMGSPath);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
-            Icon = (Icon)resources.GetObject("$this.Icon");
-            MaximizeBox = false;
-            Name = "MGS4DatlessForm";
-            Text = "MGS4Datless Tool";
-            ResumeLayout(false);
-            PerformLayout();
+            this.AcceptButton = this.btnUndat;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(519, 377);
+            this.Controls.Add(this.txtLog);
+            this.Controls.Add(this.progressBar);
+            this.Controls.Add(this.btnUndat);
+            this.Controls.Add(this.btnBrowse);
+            this.Controls.Add(this.txtMGSPath);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.Name = "MGS4DatlessForm";
+            this.Text = "MGS4Datless Tool";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
     }
 }

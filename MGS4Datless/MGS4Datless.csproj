@@ -81,12 +81,22 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\master.cnf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\Solideye.exe" />
+    <None Include="Resources\icon.ico" />
+    <None Include="Resources\dictionary.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y /i "$(ProjectDir)Resources\dictionary.txt" "$(TargetDir)Resources\"
+xcopy /y /i "$(ProjectDir)Resources\master.cnf" "$(TargetDir)Resources\"
+xcopy /y /i "$(ProjectDir)Resources\solideye.exe" "$(TargetDir)Resources\"
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>

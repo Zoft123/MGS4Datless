@@ -59,5 +59,76 @@ namespace MGS4Datless.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to s01a05l10a
+        ///s01a50l50a
+        ///s02a20l20a
+        ///s02a70l10a
+        ///s03a70l10a
+        ///s04a70l10a
+        ///s05a50l10a
+        ///s02a_medium_tree01
+        ///s02a_medium_tree02
+        ///ef_bak_bakuha04_hy
+        ///s01a_bpot_a0_sk
+        ///ef_hit_glass01_iy
+        ///ef_wtr_gun_outsplash01_iy
+        ///s01a_bpot_a1_sk
+        ///kgm_def
+        ///s01a_bpot_a2_sk
+        ///ef_hit_gsol_man_iy
+        ///dsr
+        ///m60e_mag_def_hig
+        ///title_lawn_A01
+        ///title_lawn_B01
+        ///title_lawn_B02
+        ///title_lawn_C01
+        ///m60e_mag_def_mid
+        ///m60e_mag_def_sub
+        ///iticon_noodle
+        ///kgm_item_hat
+        ///maintitle_0
+        ///s01a_btle_a0_sk
+        ///s01a_btle_a1_sk
+        ///s01a_btle_a2_sk
+        ///ef_dst_clif_snow_iy
+        ///bbr_i [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string dictionary {
+            get {
+                return ResourceManager.GetString("dictionary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon icon {
+            get {
+                object obj = ResourceManager.GetObject("icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] master {
+            get {
+                object obj = ResourceManager.GetObject("master", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Solideye {
+            get {
+                object obj = ResourceManager.GetObject("Solideye", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

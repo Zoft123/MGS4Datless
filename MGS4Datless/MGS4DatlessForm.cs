@@ -19,7 +19,7 @@ namespace MGSDatless
         public MGS4DatlessForm()
         {
             InitializeComponent();
-            binPath = Path.Combine(Application.StartupPath, "bin");
+            binPath = Path.Combine(Application.StartupPath, "Resources");
             dictionaryPath = Path.Combine(binPath, "dictionary.txt");
             solideyePath = Path.Combine(binPath, "solideye.exe");
             masterCnfPath = Path.Combine(binPath, "master.cnf");
@@ -343,6 +343,11 @@ namespace MGSDatless
 
             File.Move(sourcePath, destinationPath);
             Log($"Moved file from {Path.GetFileName(sourcePath)} to {Path.GetFileName(destinationPath)}.");
+        }
+
+        private void txtLog_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
