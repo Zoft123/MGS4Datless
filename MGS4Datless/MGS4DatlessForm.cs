@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace MGSDatless
 {
@@ -15,6 +14,16 @@ namespace MGSDatless
         private readonly string dictionaryPath;
         private readonly string solideyePath;
         private readonly string masterCnfPath;
+
+        private readonly HashSet<string> encryptedProductIDs = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "NPEB02182", "NPJB00698", "NPUB31633"
+        };
+
+        private readonly HashSet<string> stageFolderExemptionList = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "init", "mg_setup", "mg_setup1", "module", "title"
+        };
 
         public MGS4DatlessForm()
         {
@@ -76,7 +85,10 @@ namespace MGSDatless
             finally
             {
                 btnUndat.Enabled = btnBrowse.Enabled = true;
-                progressBar.Value = 100;
+                if (progressBar.Value != 100)
+                {
+                    progressBar.Value = 100;
+                }
             }
         }
 
@@ -87,6 +99,9 @@ namespace MGSDatless
 
             if (!Directory.Exists(stageDir))
                 throw new Exception("The 'stage' folder does not exist in the selected MGS directory.");
+
+            bool isEncryptedVersion = IsEncryptedVersion(mgsPath);
+            Log($"Game version requires encryption: {isEncryptedVersion}");
 
             string stageBackupDir = Path.Combine(mgsPath, "_stage");
             if (!Directory.Exists(stageBackupDir))
@@ -100,7 +115,7 @@ namespace MGSDatless
             }
 
             int totalDatFiles = 6;
-            double datIncrement = 49.0 / totalDatFiles;
+            double datIncrement = 45.0 / totalDatFiles;
             for (int i = 0; i < totalDatFiles; i++)
             {
                 string datFile = Path.Combine(mgsPath, $"stage0{i}.dat");
@@ -153,15 +168,134 @@ namespace MGSDatless
                     RenameCacheFiles(subStage);
             }
 
-            double cnfTotalProgress = 20.0;
-            AssignConfigurationFiles(masterCnfPath, newStageDir);
-            UpdateProgress(cnfTotalProgress, "Moved configuration files.");
+            double cnfTotalProgress = 15.0;
+            AssignConfigurationFiles(masterCnfPath, newStageDir, cnfTotalProgress);
+            UpdateProgress(0, "Finished assigning configuration files.");
+
+            EncryptStageFolders(newStageDir, isEncryptedVersion);
 
             double mergeProgress = 10.0;
             UpdateProgress(mergeProgress, "Merging '_stage' back into 'stage'...");
             MergeStageFolders(stageBackupDir, newStageDir);
 
-            UpdateProgress(0.5, "Finalizing...");
+            UpdateProgress(10.0, "Finalizing...");
+        }
+        
+        private bool IsEncryptedVersion(string mgsPath)
+        {
+            try
+            {
+                DirectoryInfo mgsDirectory = new DirectoryInfo(mgsPath);
+                DirectoryInfo usrdirParent = mgsDirectory.Parent;
+
+                if (usrdirParent != null && usrdirParent.Parent != null)
+                {
+                    DirectoryInfo productIDDirectory = usrdirParent.Parent;
+                    string productID = productIDDirectory.Name;
+
+                    Log($"Detected Product ID: {productID}");
+                    return encryptedProductIDs.Contains(productID);
+                }
+
+                Log("Could not determine Product ID from the expected path structure '...\\PRODUCT_ID\\USRDIR\\mgs'. Using default behavior (Unencrypted).");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Log($"An error occurred during version detection: {ex.Message}. Using default behavior (Unencrypted).");
+                return false;
+            }
+        }
+
+        private void EncryptStageFolders(string stageDir, bool isEncrypted)
+        {
+            if (!isEncrypted)
+            {
+                Log("Skipping stage encryption for this game version.");
+                return;
+            }
+
+            Log("Starting encryption process for stage folders.");
+            var stageSubFolders = Directory.GetDirectories(stageDir);
+            double progressPerFolder = stageSubFolders.Any() ? 10.0 / stageSubFolders.Length : 0;
+
+            foreach (var subStage in stageSubFolders)
+            {
+                string subStageName = Path.GetFileName(subStage);
+                if (stageFolderExemptionList.Contains(subStageName))
+                {
+                    Log($"Skipping encryption for exempt folder: {subStageName}");
+                    continue;
+                }
+
+                UpdateProgress(progressPerFolder, $"Encrypting files in {subStageName}...");
+
+                var originalFiles = Directory.GetFiles(subStage)
+                                     .Where(f => !f.EndsWith(".enc", StringComparison.OrdinalIgnoreCase))
+                                     .ToList();
+
+                if (!originalFiles.Any())
+                {
+                    Log($"No files to encrypt in {subStageName}. Skipping.");
+                    continue;
+                }
+
+                foreach (var file in originalFiles)
+                {
+                    try
+                    {
+                        ExecuteSolideyeEncrypt(file, subStageName);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log($"[ERROR] Failed to encrypt file {Path.GetFileName(file)}. Error: {ex.Message}");
+                        continue;
+                    }
+                }
+
+                foreach (var file in originalFiles)
+                {
+                    string encFilePath = file + ".enc";
+                    try
+                    {
+                        if (File.Exists(encFilePath))
+                        {
+                            File.Delete(file);
+
+                            File.Move(encFilePath, file);
+                        }
+                        else
+                        {
+                            Log($"[WARNING] Skipping rename for {Path.GetFileName(file)} as its .enc version was not found.");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log($"[ERROR] Failed to delete/rename file {Path.GetFileName(file)} after encryption. Error: {ex.Message}");
+                    }
+                }
+                Log($"Finished processing encryption for {subStageName}.");
+            }
+        }
+
+        private void ExecuteSolideyeEncrypt(string filePath, string stageFolderName)
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = solideyePath,
+                Arguments = $"-enc \"{Path.GetFileName(filePath)}\" -k stage/{stageFolderName}",
+                WorkingDirectory = Path.GetDirectoryName(filePath),
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            using var proc = Process.Start(psi);
+            proc.WaitForExit();
+
+            if (proc.ExitCode != 0)
+                throw new Exception($"Solideye failed to encrypt {Path.GetFileName(filePath)}.\nError: {proc.StandardError.ReadToEnd()}");
         }
 
         private void ExecuteSolideyeExtract(string datFilePath, string outputPath)
@@ -236,7 +370,7 @@ namespace MGSDatless
         { "cache.qar", "resident.qar" }
     };
 
-            foreach (var kvp in cacheFiles) // Explicitly iterate over KeyValuePair
+            foreach (var kvp in cacheFiles)
             {
                 string sourcePath = Path.Combine(subStageDir, kvp.Key);
                 string targetPath = Path.Combine(subStageDir, kvp.Value);
@@ -265,7 +399,7 @@ namespace MGSDatless
             }
         }
 
-        private void AssignConfigurationFiles(string masterCnfFilePath, string stageDir)
+        private void AssignConfigurationFiles(string masterCnfFilePath, string stageDir, double totalProgress)
         {
             var configMapping = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
             string currentSubFolder = null;
@@ -285,7 +419,7 @@ namespace MGSDatless
             }
 
             var stageSubFolders = Directory.GetDirectories(stageDir);
-            double progressPerSubFolder = 20.0 / stageSubFolders.Length;
+            double progressPerSubFolder = stageSubFolders.Any() ? totalProgress / stageSubFolders.Length : 0;
 
             foreach (var subStage in stageSubFolders)
             {
@@ -332,7 +466,6 @@ namespace MGSDatless
             }
             catch
             {
-                // Silent catch
             }
         }
 
