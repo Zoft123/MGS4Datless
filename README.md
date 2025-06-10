@@ -2,6 +2,27 @@
 
 **MGS4Datless** is a specialized tool designed to unpack and restructure Metal Gear Solid 4's `stage.dat` files, enabling the game to operate without reliance on these original packed data files. By extracting and organizing the game’s stage assets into a structured format, MGS4Datless allows much more modding to be possible, enhances accessibility, and eliminates the need for `stage.dat` files in the game directory.
 
+## Supported Versions
+### Encrypted:
+- NPEB02182
+- NPJB00698 
+- NPUB31633
+
+### Unencrypted:
+- BLES00246
+- BLUS30109
+- BLJM67001
+- BLAS55004
+- BLKS25002
+- BLUS30148
+- BLJM67002
+- BLJM67003
+- BLUS30109
+- BLES00246
+- BLJM67001 
+- BLJM57001
+- BLAS55005
+
 ## Key Features
 
 - **Automatic Extraction**: Unpacks all `stage.dat` files and organizes their contents into a new directory structure.
@@ -34,4 +55,5 @@
 ## Credits
 
 - **[Jayveer](https://github.com/Jayveer)** - Solideye (Essential tool for data extraction and other functionality).
+- **[Cipherxof](https://github.com/cipherxof)** (TriggerHappy) - Recommended creation of tool.
 - **eol** - Original concept functionality & CNF data.
