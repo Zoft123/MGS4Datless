@@ -17,7 +17,7 @@ namespace MGSDatless
 
         private readonly HashSet<string> encryptedProductIDs = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            "NPEB02182", "NPJB00698", "NPUB31633"
+            "NPEB02182", "NPJB00698", "NPUB31633, NPEB90122, NPJB90053, NPUB90177"
         };
 
         private readonly HashSet<string> stageFolderExemptionList = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
